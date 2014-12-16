@@ -104,18 +104,32 @@ angular.module('overmind').control = function(){
   }
 };
 
+// Object ordering
+angular.module('overmind').filter('orderObjectBy', function() {
+  return function(items, field, reverse) {
+    var filtered = [];
+    angular.forEach(items, function(item) {
+      filtered.push(item);
+    });
+    filtered.sort(function (a, b) {
+      return (a[field] > b[field] ? 1 : -1);
+    });
+    if(reverse) filtered.reverse();
+    return filtered;
+  };
+});
 
 // overmind directive, replaces ng-view
-angular.module('overmind').directive('overmind', function($location, $route){
+angular.module('overmind').directive('overmind', function($location, $route, $compile){
   return {
     restrict: 'E',
-    link: function(scope){
+    link: function(scope, elem){
       var currentlyBootstrapped;
       var currentViewScope;
 
       scope.$on('$routeChangeSuccess', function(){
         // determine the app (if any) to bootstrap or use default
-        var overmind = angular.module('overmind');
+        overmind = angular.module('overmind');
         var match = $location.path().match(/\/\w+/) || [];
         var app = overmind.apps[match[0]] || overmind.default;
 
@@ -129,6 +143,17 @@ angular.module('overmind').directive('overmind', function($location, $route){
           setView();
         }
       });
+
+      // Update the navigation whenever apps are loaded
+      scope.$on('bsAppsLoaded', function(){
+        var overmind = angular.module('overmind');
+
+        scope.apps = overmind.apps;
+
+        // Populate navigation elements
+        elem.html($compile('<div class="nav"><a data-ng-repeat="(key, value) in apps | orderObjectBy:order track by value.order" data-ng-href="#{{key}}">{{value.name}}</a></div>')(scope));
+      });
+      scope.$emit('bsAppsLoaded');
 
       function bootstrap(app){
         require([app.file], function(){
@@ -196,6 +221,6 @@ angular.module('overmind').directive('overmind', function($location, $route){
       function getCurrentView(){
         return angular.element(document.getElementById('current-view'));
       }
-    }
+    },
   }
 });

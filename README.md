@@ -57,10 +57,12 @@ var overmind = angular.module('overmind');
 
 overmind.apps = {
   '/profile': {
+    name: 'Profile',
     ngModule: 'profile',
     file: 'apps/profile/profile'
   },
   '/admin': {
+    name: 'Admin',
     ngModule: 'admin',
     file: 'apps/admin/admin'
   }
@@ -68,6 +70,7 @@ overmind.apps = {
 
 // optional default when no matching route is found
 overmind.default = { 
+  name: 'Home',
   ngModule: 'home', 
   file: 'apps/home/home'
 }
