@@ -108,7 +108,8 @@ angular.module('overmind').control = function(){
 angular.module('overmind').filter('orderObjectBy', function() {
   return function(items, field, reverse) {
     var filtered = [];
-    angular.forEach(items, function(item) {
+    angular.forEach(items, function(item, key) {
+      item._key = key;
       filtered.push(item);
     });
     filtered.sort(function (a, b) {
@@ -149,9 +150,6 @@ angular.module('overmind').directive('overmind', function($location, $route, $co
         var overmind = angular.module('overmind');
 
         scope.apps = overmind.apps;
-
-        // Populate navigation elements
-        elem.html($compile('<div class="nav"><a data-ng-repeat="(key, value) in apps | orderObjectBy:order track by value.order" data-ng-href="#{{key}}">{{value.name}}</a></div>')(scope));
       });
       scope.$emit('bsAppsLoaded');
 

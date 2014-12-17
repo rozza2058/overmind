@@ -59,12 +59,14 @@ overmind.apps = {
   '/profile': {
     name: 'Profile',
     ngModule: 'profile',
-    file: 'apps/profile/profile'
+    file: 'apps/profile/profile',
+    order: 0
   },
   '/admin': {
     name: 'Admin',
     ngModule: 'admin',
-    file: 'apps/admin/admin'
+    file: 'apps/admin/admin',
+    order: 1
   }
 };
 
