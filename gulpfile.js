@@ -4,3 +4,8 @@ var deploy = require('gulp-gh-pages');
 gulp.task('deploy', function () {
   gulp.src('./demo/**/*').pipe(deploy());
 });
+
+gulp.task('push', function ()
+{
+  return git.push();
+});
