@@ -8,5 +8,5 @@ gulp.task('deploy', function () {
 
 gulp.task('push', function ()
 {
-  return git.push();
+  return git.push('origin', ' ');
 });
